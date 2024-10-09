@@ -22,7 +22,7 @@ const RTLSupport: React.FC = () => {
   return (
     <div style={{ height: 300, width: 700 }}>
       <SortableTree
-        rowDirection="rtl"
+        rowdirection="rtl"
         treeData={treeData}
         onChange={setTreeData}
       />

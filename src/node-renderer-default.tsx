@@ -18,7 +18,7 @@ const defaultProps = {
   canDrop: false,
   title: undefined,
   subtitle: undefined,
-  rowDirection: 'ltr',
+  rowdirection: 'ltr',
 }
 
 export interface NodeRendererProps {
@@ -42,7 +42,7 @@ export interface NodeRendererProps {
   swapLength?: number | undefined
   listIndex: number
   treeId: string
-  rowDirection?: 'ltr' | 'rtl' | string | undefined
+  rowdirection?: 'ltr' | 'rtl' | string | undefined
 
   connectDragPreview: ConnectDragPreview
   connectDragSource: ConnectDragSource
@@ -82,12 +82,12 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
     treeId: _treeId,
     isOver: _isOver, // Not needed, but preserved for other renderers
     parentNode: _parentNode, // Needed for dndManager
-    rowDirection,
+    rowdirection,
     ...otherProps
   } = props
   const nodeTitle = title || node.title
   const nodeSubtitle = subtitle || node.subtitle
-  const rowDirectionClass = rowDirection === 'rtl' ? 'rst__rtl' : undefined
+  const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
   let handle
   if (canDrag) {
@@ -117,7 +117,7 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
   const isLandingPadActive = !didDrop && isDragging
 
   let buttonStyle = { left: -0.5 * scaffoldBlockPxWidth, right: 0 }
-  if (rowDirection === 'rtl') {
+  if (rowdirection === 'rtl') {
     buttonStyle = { right: -0.5 * scaffoldBlockPxWidth, left: 0 }
   }
 

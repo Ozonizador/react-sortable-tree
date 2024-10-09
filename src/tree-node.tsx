@@ -21,8 +21,8 @@ export interface TreeRendererProps {
   swapLength?: number | undefined
   scaffoldBlockPxWidth: number
   lowerSiblingCounts: number[]
-  rowDirection?: 'ltr' | 'rtl' | string | undefined
-  rowHeight: number | ((treeIndex: number, node: any, path: any[]) => number)
+  rowdirection?: 'ltr' | 'rtl' | string | undefined
+  rowheight: number | ((treeIndex: number, node: any, path: any[]) => number)
 
   listIndex: number
   children: JSX.Element[]
@@ -46,7 +46,7 @@ const defaultProps = {
   swapLength: undefined,
   canDrop: false,
   draggedNode: undefined,
-  rowDirection: 'ltr',
+  rowdirection: 'ltr',
 }
 
 class TreeNodeComponent extends Component<TreeRendererProps> {
@@ -65,16 +65,16 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
       draggedNode,
       canDrop,
       treeIndex,
-      rowHeight,
+      rowheight,
       treeId: _treeId, // Delete from otherProps
       getPrevRow: _getPrevRow, // Delete from otherProps
       node: _node, // Delete from otherProps
       path: _path, // Delete from otherProps
-      rowDirection,
+      rowdirection,
       ...otherProps
     } = props
 
-    const rowDirectionClass = rowDirection === 'rtl' ? 'rst__rtl' : undefined
+    const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
     // Construct the scaffold representing the structure of the tree
     const scaffoldBlockCount = lowerSiblingCounts.length
@@ -157,7 +157,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
         }
 
         const style =
-          rowDirection === 'rtl'
+          rowdirection === 'rtl'
             ? {
                 width: scaffoldBlockPxWidth,
                 right: scaffoldBlockPxWidth * i,
@@ -182,13 +182,13 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
     }
 
     const style =
-      rowDirection === 'rtl'
+      rowdirection === 'rtl'
         ? { right: scaffoldBlockPxWidth * scaffoldBlockCount }
         : { left: scaffoldBlockPxWidth * scaffoldBlockCount }
 
-    let calculatedRowHeight = rowHeight
-    if (typeof rowHeight === 'function') {
-      calculatedRowHeight = rowHeight(treeIndex, _node, _path)
+    let calculatedRowHeight = rowheight
+    if (typeof rowheight === 'function') {
+      calculatedRowHeight = rowheight(treeIndex, _node, _path)
     }
     return connectDropTarget(
       <div

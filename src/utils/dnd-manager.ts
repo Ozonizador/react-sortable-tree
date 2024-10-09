@@ -102,7 +102,7 @@ const getTargetDepth = (
   // When adding node from external source
   if (monitor.getItem().treeId === treeId) {
     // handle row direction support
-    const direction = dropTargetProps.rowDirection === 'rtl' ? -1 : 1
+    const direction = dropTargetProps.rowdirection === 'rtl' ? -1 : 1
 
     blocksOffset = Math.round(
       (direction * monitor.getDifferenceFromInitialOffset().x) /

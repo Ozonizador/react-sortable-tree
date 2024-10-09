@@ -44,7 +44,7 @@ const mergeTheme = (props) => {
     placeholderRenderer: PlaceholderRendererDefault,
     scaffoldBlockPxWidth: 44,
     slideRegionSize: 100,
-    rowHeight: 62,
+    rowheight: 62,
     treeNodeRenderer: TreeNode,
   }
   for (const propKey of Object.keys(overridableDefaults)) {
@@ -545,8 +545,8 @@ class ReactSortableTree extends Component {
       generateNodeProps,
       scaffoldBlockPxWidth,
       searchFocusOffset,
-      rowDirection,
-      rowHeight,
+      rowdirection,
+      rowheight,
     } = mergeTheme(this.props)
     const TreeNodeRenderer = this.treeNodeRenderer
     const NodeContentRenderer = this.nodeContentRenderer
@@ -573,13 +573,13 @@ class ReactSortableTree extends Component {
       node,
       path,
       treeId: this.treeId,
-      rowDirection,
+      rowdirection,
     }
 
     return (
       <TreeNodeRenderer
         style={style}
-        rowHeight={rowHeight}
+        rowheight={rowheight}
         key={nodeKey}
         listIndex={listIndex}
         getPrevRow={getPrevRow}
@@ -609,7 +609,7 @@ class ReactSortableTree extends Component {
       innerStyle,
       placeholderRenderer,
       getNodeKey,
-      rowDirection,
+      rowdirection,
     } = mergeTheme(this.props)
 
     const {
@@ -623,7 +623,7 @@ class ReactSortableTree extends Component {
     } = this.state
 
     const treeData = draggingTreeData || instanceProps.treeData
-    const rowDirectionClass = rowDirection === 'rtl' ? 'rst__rtl' : undefined
+    const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
     let rows
     let swapFrom
@@ -841,18 +841,18 @@ export type ReactSortableTreeProps = {
   placeholderRenderer?: any
 
   theme?: {
-    style: any
-    innerStyle: any
-    scaffoldBlockPxWidth: number
-    slideRegionSize: number
-    treeNodeRenderer: any
-    nodeContentRenderer: any
-    placeholderRenderer: any
+    style?: any
+    innerStyle?: any
+    scaffoldBlockPxWidth?: number
+    slideRegionSize?: number
+    treeNodeRenderer?: any
+    nodeContentRenderer?: any
+    placeholderRenderer?: any
   }
 
   // Sets the height of a given tree row item in pixels. Can either be a number
   // or a function to calculate dynamically
-  rowHeight?: number | ((treeIndex: number, node: any, path: any[]) => number)
+  rowheight?: number | ((treeIndex: number, node: any, path: any[]) => number)
 
   // Determine the unique key used to identify each node and
   // generate the `path` array passed in callbacks.
@@ -894,7 +894,7 @@ export type ReactSortableTreeProps = {
   onlyExpandSearchedNodes?: boolean
 
   // rtl support
-  rowDirection?: string
+  rowdirection?: string
 
   debugMode?: boolean
 
@@ -927,7 +927,7 @@ ReactSortableTree.defaultProps = {
   theme: {},
   onDragStateChanged: () => {},
   onlyExpandSearchedNodes: false,
-  rowDirection: 'ltr',
+  rowdirection: 'ltr',
   debugMode: false,
   overscan: 0,
   virtuaRef: undefined,
