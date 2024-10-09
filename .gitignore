@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
+package-lock.json
 coverage
 
 # Editor and other tmp files
@@ -16,7 +17,6 @@ coverage
 # Build directories (Will be preserved by npm)
 .cache
 dist
-lib
 build
 style.css
 style.css.map
@@ -27,5 +27,3 @@ yarn-error.log
 .vscode
 .eslintcache
 .nvmrc
-
-storybook-static/

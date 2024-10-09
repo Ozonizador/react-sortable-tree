@@ -1,6 +1,4 @@
-
-
-# Note: Check Issues for more info
+# Note: TypeScript support (included from v4)
 
 <div align="center">
   <img src="https://cloud.githubusercontent.com/assets/4413963/18860410/26f64de8-84b8-11e6-9284-350308eed30a.png"/>
@@ -8,10 +6,10 @@
 
 # React Sortable Tree
 
-![NPM version](https://img.shields.io/npm/v/@ozonizador/react-sortable-tree.svg?style=flat)
-![NPM license](https://img.shields.io/npm/l/@ozonizador/react-sortable-tree.svg?style=flat)
-[![NPM total downloads](https://img.shields.io/npm/dt/@ozonizador/react-sortable-tree.svg?style=flat)](https://npmcharts.com/compare/@ozonizador/react-sortable-tree?minimal=true)
-[![NPM monthly downloads](https://img.shields.io/npm/dm/@ozonizador/react-sortable-tree.svg?style=flat)](https://npmcharts.com/compare/@ozonizador/react-sortable-tree?minimal=true)
+![NPM version](https://img.shields.io/npm/v/@nosferatu500/react-sortable-tree.svg?style=flat)
+![NPM license](https://img.shields.io/npm/l/@nosferatu500/react-sortable-tree.svg?style=flat)
+[![NPM total downloads](https://img.shields.io/npm/dt/@nosferatu500/react-sortable-tree.svg?style=flat)](https://npmcharts.com/compare/@nosferatu500/react-sortable-tree?minimal=true)
+[![NPM monthly downloads](https://img.shields.io/npm/dm/@nosferatu500/react-sortable-tree.svg?style=flat)](https://npmcharts.com/compare/@nosferatu500/react-sortable-tree?minimal=true)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 > A React component for Drag-and-drop sortable representation of hierarchical data. Checkout the [Storybook](https://frontend-collective.github.io/react-sortable-tree/) for a demonstration of some basic and advanced features.
@@ -37,10 +35,10 @@ Install `react-sortable-tree` using npm.
 
 ```sh
 # NPM
-npm install @ozonizador/react-sortable-tree --save
+npm install @nosferatu500/react-sortable-tree --save
 
 # YARN
-yarn add @ozonizador/react-sortable-tree
+yarn add @nosferatu500/react-sortable-tree
 ```
 
 ES6 and CommonJS builds are available with each distribution.
@@ -48,28 +46,28 @@ For example:
 
 ```js
 // This only needs to be done once; probably during your application's bootstrapping process.
-import '@ozonizador/react-sortable-tree/style.css';
+import '@nosferatu500/react-sortable-tree/style.css';
 
 // You can import the default tree with dnd context
-import SortableTree from '@ozonizador/react-sortable-tree';
+import SortableTree from '@nosferatu500/react-sortable-tree';
 
 // Or you can import the tree without the dnd context as a named export. eg
-import { SortableTreeWithoutDndContext as SortableTree } from '@ozonizador/react-sortable-tree';
+import { SortableTreeWithoutDndContext as SortableTree } from '@nosferatu500/react-sortable-tree';
 
 // Importing from cjs (default)
-import SortableTree from '@ozonizador/react-sortable-tree/dist/index.cjs.js';
-import SortableTree from '@ozonizador/react-sortable-tree';
+import SortableTree from '@nosferatu500/react-sortable-tree/dist/index.cjs.js';
+import SortableTree from '@nosferatu500/react-sortable-tree';
 
 // Importing from esm
-import SortableTree from '@ozonizador/react-sortable-tree/dist/index.esm.js';
+import SortableTree from '@nosferatu500/react-sortable-tree/dist/index.esm.js';
 ```
 
 ## Usage
 
 ```jsx
 import React, { Component } from 'react';
-import SortableTree from '@ozonizador/react-sortable-tree';
-import '@ozonizador/react-sortable-tree/style.css'; // This only needs to be imported once in your app
+import SortableTree from '@nosferatu500/react-sortable-tree';
+import '@nosferatu500/react-sortable-tree/style.css'; // This only needs to be imported once in your app
 
 export default class Tree extends Component {
   constructor(props) {
@@ -164,7 +162,7 @@ Using the `theme` prop along with an imported theme module, you can easily overr
 | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------: |
 |                                                                            **File Explorer**                                                                             |                                                                             **Full Node Drag**                                                                             |                                                   **Minimalistic theme inspired from MATERIAL UI**                                                   |
 |                                                                 @nosferatu500/theme-file-explorer                                                                  |                                                                  react-sortable-tree-theme-full-node-drag                                                                  |                                                          react-sortable-tree-theme-minimal                                                           |
-| [Github](https://github.com/nosferatu500/theme-file-explorer) \| [NPM](https://www.npmjs.com/package/@ozonizador/theme-file-explorer) | [Github](https://github.com/frontend-collective/react-sortable-tree-theme-full-node-drag) \| [NPM](https://www.npmjs.com/package/react-sortable-tree-theme-full-node-drag) | [Github](https://github.com/lifejuggler/react-sortable-tree-theme-minimal) \| [NPM](https://www.npmjs.com/package/react-sortable-tree-theme-minimal) |
+| [Github](https://github.com/nosferatu500/theme-file-explorer) \| [NPM](https://www.npmjs.com/package/@nosferatu500/theme-file-explorer) | [Github](https://github.com/frontend-collective/react-sortable-tree-theme-full-node-drag) \| [NPM](https://www.npmjs.com/package/react-sortable-tree-theme-full-node-drag) | [Github](https://github.com/lifejuggler/react-sortable-tree-theme-minimal) \| [NPM](https://www.npmjs.com/package/react-sortable-tree-theme-minimal) |
 
 **Help Wanted** - As the themes feature has just been enabled, there are very few (only _two_ at the time of this writing) theme modules available. If you've customized the appearance of your tree to be especially cool or easy to use, I would be happy to feature it in this readme with a link to the Github repo and NPM page if you convert it to a theme. You can use my [file explorer theme repo](https://github.com/nosferatu500/theme-file-explorer) as a template to plug in your own stuff.
 
@@ -191,10 +189,10 @@ react-dnd only allows for one DragDropContext at a time (see: https://github.com
 
 ```js
 // before
-import SortableTree from '@ozonizador/react-sortable-tree';
+import SortableTree from '@nosferatu500/react-sortable-tree';
 
 // after
-import { SortableTreeWithoutDndContext as SortableTree } from '@ozonizador/react-sortable-tree';
+import { SortableTreeWithoutDndContext as SortableTree } from '@nosferatu500/react-sortable-tree';
 ```
 
 ## Contributing

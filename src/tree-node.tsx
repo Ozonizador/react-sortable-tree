@@ -74,7 +74,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
       ...otherProps
     } = props
 
-    const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
+    const rowdirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
     // Construct the scaffold representing the structure of the tree
     const scaffoldBlockCount = lowerSiblingCounts.length
@@ -134,7 +134,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
           className={classnames(
             'rst__lineBlock',
             lineClass,
-            rowDirectionClass ?? ''
+            rowdirectionClass ?? ''
           )}
         />
       )
@@ -174,7 +174,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
             className={classnames(
               'rst__absoluteLineBlock',
               highlightLineClass,
-              rowDirectionClass ?? ''
+              rowdirectionClass ?? ''
             )}
           />
         )
@@ -194,7 +194,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
       <div
         {...otherProps}
         style={{ height: `${calculatedRowHeight}px` }}
-        className={classnames('rst__node', rowDirectionClass ?? '')}
+        className={classnames('rst__node', rowdirectionClass ?? '')}
         //@ts-ignore
         ref={(node) => (this.node = node)}>
         {scaffold}

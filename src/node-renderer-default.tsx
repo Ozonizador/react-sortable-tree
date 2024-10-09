@@ -56,7 +56,7 @@ export interface NodeRendererProps {
   canDrop?: boolean | undefined
 }
 
-const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
+const NodeRendererDefault: React.FC<NodeRendererProps> = function (props) {
   props = { ...defaultProps, ...props }
 
   const {
@@ -87,7 +87,7 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
   } = props
   const nodeTitle = title || node.title
   const nodeSubtitle = subtitle || node.subtitle
-  const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
+  const rowdirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
   let handle
   if (canDrag) {
@@ -100,7 +100,7 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
                 key={index}
                 className={classnames(
                   'rst__loadingCirclePoint',
-                  rowDirectionClass ?? ''
+                  rowdirectionClass ?? ''
                 )}
               />
             ))}
@@ -132,7 +132,7 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
               aria-label={node.expanded ? 'Collapse' : 'Expand'}
               className={classnames(
                 node.expanded ? 'rst__collapseButton' : 'rst__expandButton',
-                rowDirectionClass ?? ''
+                rowdirectionClass ?? ''
               )}
               style={buttonStyle}
               onClick={() =>
@@ -149,14 +149,14 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
                 style={{ width: scaffoldBlockPxWidth }}
                 className={classnames(
                   'rst__lineChildren',
-                  rowDirectionClass ?? ''
+                  rowdirectionClass ?? ''
                 )}
               />
             )}
           </div>
         )}
 
-      <div className={classnames('rst__rowWrapper', rowDirectionClass ?? '')}>
+      <div className={classnames('rst__rowWrapper', rowdirectionClass ?? '')}>
         {/* Set the row preview to be used during drag and drop */}
         {connectDragPreview(
           <div
@@ -166,7 +166,7 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
               isLandingPadActive && !canDrop ? 'rst__rowCancelPad' : '',
               isSearchMatch ? 'rst__rowSearchMatch' : '',
               isSearchFocus ? 'rst__rowSearchFocus' : '',
-              rowDirectionClass ?? '',
+              rowdirectionClass ?? '',
               className ?? ''
             )}
             style={{
@@ -179,12 +179,12 @@ const NodeRendererDefault: React.FC<NodeRendererProps> = (props) => {
               className={classnames(
                 'rst__rowContents',
                 canDrag ? '' : 'rst__rowContentsDragDisabled',
-                rowDirectionClass ?? ''
+                rowdirectionClass ?? ''
               )}>
               <div
                 className={classnames(
                   'rst__rowLabel',
-                  rowDirectionClass ?? ''
+                  rowdirectionClass ?? ''
                 )}>
                 <span
                   className={classnames(

@@ -562,7 +562,7 @@ export const addNodeUnderParent = ({
     getNodeKey,
     ignoreCollapsed,
     callback: ({ node, treeIndex, path }: GetTreeItemChildren) => {
-      const key = path ? path.at(-1) : undefined
+      const key = path ? path[path.length - 1] : undefined
       // Return nodes that are not the parent as-is
       if (hasBeenAdded || key !== parentKey) {
         return node
@@ -878,11 +878,6 @@ export const getTreeFromFlatData = ({
   getKey = (node) => node.id,
   getParentKey = (node) => node.parentId,
   rootKey = '0',
-}: {
-  flatData: any
-  getKey: (node: any) => string
-  getParentKey: (node: any) => string
-  rootKey: string | null
 }) => {
   if (!flatData) {
     return []

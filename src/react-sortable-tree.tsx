@@ -1,12 +1,18 @@
 // @ts-nocheck
 
 import React, { Component } from 'react'
+import withScrolling, {
+  createHorizontalStrength,
+  createScrollingComponent,
+  createVerticalStrength,
+} from '@nosferatu500/react-dnd-scrollzone'
 import isEqual from 'lodash.isequal'
 import { DndContext, DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { VList, VListHandle } from 'virtua'
+import { Virtuoso, VirtuosoHandle, VirtuosoProps } from 'react-virtuoso'
 import NodeRendererDefault from './node-renderer-default'
 import PlaceholderRendererDefault from './placeholder-renderer-default'
+import './react-sortable-tree.css'
 import TreeNode from './tree-node'
 import TreePlaceholder from './tree-placeholder'
 import { classnames } from './utils/classnames'
@@ -179,7 +185,8 @@ class ReactSortableTree extends Component {
   constructor(props) {
     super(props)
 
-    this.listRef = props.virtuaRef || React.createRef<VListHandle>()
+    this.listRef = props.virtuosoRef || React.createRef()
+    this.listProps = props.virtuosoProps || {}
 
     const { dndType, nodeContentRenderer, treeNodeRenderer, slideRegionSize } =
       mergeTheme(props)
@@ -200,6 +207,22 @@ class ReactSortableTree extends Component {
       this.drop,
       this.dndType
     )
+
+    // Prepare scroll-on-drag options for this list
+    this.scrollZoneVirtualList = (createScrollingComponent || withScrolling)(
+      React.forwardRef((props, ref) => {
+        const { dragDropManager, rowheight, ...otherProps } = props
+        return (
+          <Virtuoso
+            ref={this.listRef}
+            scrollerRef={(scrollContainer) => (ref.current = scrollContainer)}
+            {...otherProps}
+          />
+        )
+      })
+    )
+    this.vStrength = createVerticalStrength(slideRegionSize)
+    this.hStrength = createHorizontalStrength(slideRegionSize)
 
     this.state = {
       draggingTreeData: undefined,
@@ -227,7 +250,10 @@ class ReactSortableTree extends Component {
       this.props.canDrop,
       this.drop,
       this.dragHover,
-      this.dndType
+      this.dndType,
+      this.state.draggingTreeData,
+      this.props.treeData,
+      this.props.getNodeKey
     )
 
     this.toggleChildrenVisibility = this.toggleChildrenVisibility.bind(this)
@@ -550,7 +576,7 @@ class ReactSortableTree extends Component {
     } = mergeTheme(this.props)
     const TreeNodeRenderer = this.treeNodeRenderer
     const NodeContentRenderer = this.nodeContentRenderer
-    const nodeKey = path.at(-1)
+    const nodeKey = path[path.length - 1]
     const isSearchMatch = nodeKey in matchKeys
     const isSearchFocus =
       isSearchMatch && matchKeys[nodeKey] === searchFocusOffset
@@ -611,19 +637,17 @@ class ReactSortableTree extends Component {
       getNodeKey,
       rowdirection,
     } = mergeTheme(this.props)
-
     const {
       searchMatches,
       searchFocusTreeIndex,
       draggedNode,
       draggedDepth,
       draggedMinimumTreeIndex,
-      draggingTreeData,
       instanceProps,
     } = this.state
 
-    const treeData = draggingTreeData || instanceProps.treeData
-    const rowDirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
+    const treeData = this.state.draggingTreeData || instanceProps.treeData
+    const rowdirectionClass = rowdirection === 'rtl' ? 'rst__rtl' : undefined
 
     let rows
     let swapFrom
@@ -654,13 +678,13 @@ class ReactSortableTree extends Component {
     // Get indices for rows that match the search conditions
     const matchKeys = {}
     for (const [i, { path }] of searchMatches.entries()) {
-      matchKeys[path.at(-1)] = i
+      matchKeys[path[path.length - 1]] = i
     }
 
     // Seek to the focused search result if there is one specified
     if (searchFocusTreeIndex !== undefined) {
-      this.listRef?.current?.scrollToIndex(searchFocusTreeIndex, {
-        smooth: true,
+      this.listRef.current.scrollToIndex({
+        index: searchFocusTreeIndex,
         align: 'center',
       })
     }
@@ -678,16 +702,18 @@ class ReactSortableTree extends Component {
     } else {
       containerStyle = { height: '100%', ...containerStyle }
 
+      const ScrollZoneVirtualList = this.scrollZoneVirtualList
+      // Render list with react-virtuoso
       list = (
-        <VList
-          id="vlist"
-          ref={this.listRef}
+        <ScrollZoneVirtualList
+          data={rows}
           dragDropManager={dragDropManager}
+          verticalStrength={this.vStrength}
+          horizontalStrength={this.hStrength}
+          className="rst__virtualScrollOverride"
           style={innerStyle}
-          count={rows.length}>
-          {(index) => {
-            const item = rows[index]
-            return this.renderRow(item, {
+          itemContent={(index) =>
+            this.renderRow(rows[index], {
               listIndex: index,
               getPrevRow: () => rows[index - 1] || undefined,
               matchKeys,
@@ -695,14 +721,15 @@ class ReactSortableTree extends Component {
               swapDepth: draggedDepth,
               swapLength,
             })
-          }}
-        </VList>
+          }
+          {...this.listProps}
+        />
       )
     }
 
     return (
       <div
-        className={classnames('rst__tree', className, rowDirectionClass)}
+        className={classnames('rst__tree', className, rowdirectionClass)}
         style={containerStyle}>
         {list}
       </div>
@@ -789,10 +816,14 @@ export type ReactSortableTreeProps = {
   // Class name for the container wrapping the tree
   className?: string
 
-  // Ref for virtua component
-  // Use virtuaRef when you want to use virtua handler
+  // Properties passed directly to the underlying Virtuoso component
+  // See https://virtuoso.dev/virtuoso-api-reference/#virtuoso-properties
+  virtuosoProps?: VirtuosoProps
+
+  // Ref for Virtuoso component
+  // Use virtuosoRef when you wont to use virtuoso handler
   // (ex. scrollTo scrollToIndex)
-  virtuaRef?: React.Ref<VListHandle>
+  virtuosoRef?: React.Ref<VirtuosoHandle>
 
   // Style applied to the inner, scrollable container (for padding, etc.)
   innerStyle?: any
@@ -878,9 +909,7 @@ export type ReactSortableTreeProps = {
 
   // When true, or a callback returning true, dropping nodes to react-dnd
   // drop targets outside of this tree will not remove them from this tree
-  shouldCopyOnOutsideDrop?:
-    | ((params: ShouldCopyOnOutsideDropParams) => boolean)
-    | boolean
+  shouldCopyOnOutsideDrop?: (params: ShouldCopyOnOutsideDropParams) => boolean
 
   // Called after children nodes collapsed or expanded.
   onVisibilityToggle?: (params: OnVisibilityToggleParams) => void
@@ -930,12 +959,9 @@ ReactSortableTree.defaultProps = {
   rowdirection: 'ltr',
   debugMode: false,
   overscan: 0,
-  virtuaRef: undefined,
 }
 
-export const SortableTreeWithoutDndContext = (
-  props: ReactSortableTreeProps
-) => {
+const SortableTreeWithoutDndContext = function (props: ReactSortableTreeProps) {
   return (
     <DndContext.Consumer>
       {({ dragDropManager }) =>
@@ -947,10 +973,17 @@ export const SortableTreeWithoutDndContext = (
   )
 }
 
-export const SortableTree = (props: ReactSortableTreeProps) => {
+const SortableTree = function (props: ReactSortableTreeProps) {
   return (
     <DndProvider debugMode={props.debugMode} backend={HTML5Backend}>
       <SortableTreeWithoutDndContext {...props} />
     </DndProvider>
   )
 }
+
+// Export the tree component without the react-dnd DragDropContext,
+// for when component is used with other components using react-dnd.
+// see: https://github.com/gaearon/react-dnd/issues/186
+export { SortableTreeWithoutDndContext }
+
+export default SortableTree
