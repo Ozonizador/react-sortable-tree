@@ -195,6 +195,7 @@ class TreeNodeComponent extends Component<TreeRendererProps> {
         {...otherProps}
         style={{ height: `${calculatedRowHeight}px` }}
         className={classnames('rst__node', rowDirectionClass ?? '')}
+        //@ts-ignore
         ref={(node) => (this.node = node)}>
         {scaffold}
 
